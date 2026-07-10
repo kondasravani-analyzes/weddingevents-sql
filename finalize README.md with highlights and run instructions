@@ -1,0 +1,52 @@
+# WeddingEvents SQL Project
+
+## 📌 Overview
+This project is a **Wedding Event Management Database** built in SQL Server.  
+It models real‑world workflows such as events, requirements, vendors, budgets, guests, payments, and tasks.  
+The goal is to demonstrate database design, relationships, and practical queries for event management.
+
+---
+
+## 🗂️ Database Schema
+Tables included:
+- **Events** → Stores ceremonies (Haldi, Wedding, Reception).
+- **Requirements** → Items needed for each event.
+- **Vendors** → Suppliers linked to events.
+- **Budgets** → Estimated vs. actual costs.
+- **Guests** → Guest list with RSVP and seating.
+- **Payments** → Tracks payments made to vendors.
+- **Tasks** → To‑do items for event workflows.
+
+---
+
+## 🔗 Relationships
+- Events ↔ Requirements (1‑to‑many)  
+- Events ↔ Vendors (1‑to‑many)  
+- Events ↔ Budgets (1‑to‑1)  
+- Events ↔ Guests (1‑to‑many)  
+- Events ↔ Tasks (1‑to‑many)  
+- Events + Vendors ↔ Payments (many‑to‑many)
+
+---
+
+## 📊 ER Diagram
+![ERD](ERD.png)
+
+## 🎯 Highlights
+- Normalized schema with proper PK/FK relationships.
+- Realistic inserts for wedding workflows.
+- ERD diagram included for visual clarity.
+- Portfolio‑ready SQL project for recruiters and collaborators.
+
+---
+
+## 🚀 How to Run
+1. Clone this repository.  
+2. Open `weddingevents.sql` in **SQL Server Management Studio (SSMS)** or **Visual Studio**.  
+3. Execute the script to create tables and insert sample data.  
+4. Run queries like:
+   ```sql
+   SELECT * FROM Events;
+   SELECT EventName, VendorName, ServiceType
+   FROM Events
+   JOIN Vendors ON Events.EventID = Vendors.EventID;
