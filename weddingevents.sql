@@ -179,3 +179,103 @@ VALUES
 (2, 'Banquet Decoration', 'Bloom & Glow Florists', '2026-07-17', 'In Progress'),
 (3, 'Reception DJ Setup', 'DJ Fusion Beats', '2026-07-19', 'Pending');
 
+select * from payments;
+select * from vendors;
+CREATE TABLE MiscExpenses (
+    ExpenseID INT PRIMARY KEY IDENTITY(1,1),   -- unique ID for each expense
+    EventID INT FOREIGN KEY REFERENCES Events(EventID), -- link to Haldi, Sangeeth, etc.
+    ExpenseDate DATE NOT NULL,                 -- when the expense happened
+    Reason VARCHAR(100) NOT NULL,              -- description (puja items, cleaners, petrol)
+    PaymentAmount DECIMAL(10,2) NOT NULL,      -- amount spent
+    PaymentType VARCHAR(20)                    -- cash, online, etc.
+);
+
+select * from events;
+-- Update EventID 1 to Haldi
+UPDATE Events
+SET EventName = 'Haldi',
+    EventDate = '2026-07-11',
+    Venue     = 'Farm House'
+WHERE EventID = 1;
+
+-- Update EventID 2 to Sangeeth
+UPDATE Events
+SET EventName = 'Sangeeth',
+    EventDate = '2026-07-11',
+    Venue     = 'Farm House'
+WHERE EventID = 2;
+
+-- Update EventID 3 to Half Saree Ceremony
+UPDATE Events
+SET EventName = 'Half Saree Ceremony',
+    EventDate = '2026-07-18',
+    Venue     = 'Covention Hall'
+WHERE EventID = 3;
+
+INSERT INTO MiscExpenses (EventID, ExpenseDate, Reason, PaymentAmount, PaymentType)
+VALUES
+(1, '2026-07-11', 'Puja items', 670.00, 'Cash'),
+(1, '2026-07-11', 'Cleaners after Haldi', 600.00, 'Cash'),
+(2, '2026-07-11', 'Balloons & Rapido charges', 1000.00, 'Cash'),
+(2, '2026-07-11', 'Cold fires for Sangeeth', 2500.00, 'Online'),
+(2, '2026-07-11', 'Petrol', 2500.00, 'Cash');
+
+CREATE TABLE VendorAdvances (
+    PaymentID INT PRIMARY KEY IDENTITY(1,1),   -- unique payment record
+    EventID INT FOREIGN KEY REFERENCES Events(EventID), -- link to Haldi, Sangeeth, etc.
+    VendorName VARCHAR(100) NOT NULL,          -- e.g., Kasim Lightings, Surya Decoration
+    ServiceType VARCHAR(50),                   -- e.g., Decoration, Photography, Choreography
+    PaymentAmount DECIMAL(10,2) NOT NULL,      -- amount paid
+    PaymentType VARCHAR(20),                   -- Cash, Online, etc.
+    PaymentDate DATE                           -- when payment was made
+);
+
+INSERT INTO VendorAdvances (EventID, VendorName, ServiceType, PaymentAmount, PaymentType, PaymentDate)
+VALUES
+(1, 'Choreographer', 'Dance', 10000.00, 'Cash', '2026-07-10'),
+(1, 'Surya Decoration', 'Decoration', 30000.00, 'Online', '2026-07-10'),
+(1, 'Verana Flex', 'Flex Printing', 2000.00, 'Cash', '2026-07-10'),
+(2, 'Kasim Lightings', 'Lighting', 15000.00, 'Cash', '2026-07-10'),
+(2, 'Cold Fires', 'Special Effects', 2500.00, 'Online', '2026-07-11'),
+(2, 'Kasim Lightings', 'Lighting', 15000.00, 'Cash', '2026-07-11'),
+(2, 'Verana Flex', 'Flex Printing', 2000.00, 'Cash', '2026-07-11'),
+(1, 'Photography', 'Photography', 100000.00, 'Advance', '2026-07-10');
+
+-- Listing all events names with dates 
+select EventName,Eventdate from events;
+--- List vendor advances
+--- vendor name , amount 
+select vendorname,paymentamount from VendorAdvances;
+---List misc expenses 
+select EventId,Reason,PaymentAmount from MiscExpenses;
+use weddingevents;
+
+/*sort misc expenses 
+note: cold fires for sangeeth is most expensive */
+select reason, paymentamount from miscexpenses 
+order by paymentamount DESC
+
+---Total misc per event
+select eventID,sum(paymentamount) as total_paymentamount
+from miscexpenses 
+group by eventID; 
+
+--total advance per event 
+select eventID,vendorname,sum(paymentamount) as total_amount
+from vendoradvances
+group by eventID,vendorname;
+
+INSERT INTO VendorAdvances (EventID, VendorName, ServiceType, PaymentAmount, PaymentType, PaymentDate)
+VALUES
+(2, 'Kasim Lightings', 'Lighting', 10000.00, 'Cash', '2026-07-12'),
+(2, 'Akram', 'Decoration', 5000.00, 'Cash', '2026-07-12'),
+(2, 'Akram', 'Decoration', 12000.00, 'Cash', '2026-07-12'),
+(2, 'Flowers Vendor', 'Flowers', 3500.00, 'Cash', '2026-07-12'),
+(2, 'Pasha', 'Frames & Cutting', 1000.00, 'Cash', '2026-07-12'),
+(2, 'Kasim Lightings', 'Lighting', 50000.00, 'Cash', '2026-07-12');
+
+INSERT INTO MiscExpenses (EventID, ExpenseDate, Reason, PaymentAmount, PaymentType)
+VALUES
+(2, '2026-07-12', 'Tip for Cleaners', 700.00, 'Cash'),
+(2, '2026-07-12', 'Tip for Tent House', 2000.00, 'Cash');
+
