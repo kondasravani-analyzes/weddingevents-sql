@@ -1,0 +1,70 @@
+# Wedding Events SQL Project
+
+## 📂 Project Overview
+Tracking wedding event workflows and payments using SQL Server. Includes Events, VendorAdvances, and MiscExpenses tables. Queries are written to analyze and project total spending.
+
+---
+
+## 🗂️ Tables Used
+- Events → Event names and dates (Haldi, Sangeeth, Half Saree Ceremony).
+- VendorAdvances → Vendor payments and advances.
+- MiscExpenses → Small event-day costs.
+
+---
+
+## 📝 Inputs for Today (17 July 2026)
+### VendorAdvances
+- Surya Decoration – 25,000  
+- Photography – 35,000  
+- Flowers for Shoot – 800  
+- FastTag – 500  
+- Jabardasth Team (Comedians) – 50,000  
+- Tent House Raju (PhonePe) – 50,000  
+- Jabardasth Team (PhonePe) – 25,000  
+- Photography Team (PhonePe) – 40,000  
+- Jaipal Vehicle Entry – 33,000  
+- Wax Hands & Birds Event – 50,000  
+- Selfie Box – 5,000  
+- Decoration Team – 1,50,000  
+- Decoration Team – 50,000  
+- Turkish Ice Cream – 5,000  
+- Telephone Booth – 5,000  
+
+### MiscExpenses
+- Petrol – 2,500  
+- Assistant Tip – 500  
+
+---
+
+## 🎯 Intermediate Query (CTE)
+```sql
+WITH VendorAdvancesTotal AS (
+    SELECT EventID, SUM(PaymentAmount) AS Total_amount
+    FROM VendorAdvances
+    WHERE PaymentDate <= '2026-07-17'
+    GROUP BY EventID
+)
+SELECT e.EventName, v.Total_amount
+FROM Events e
+JOIN VendorAdvancesTotal v ON e.EventID = v.EventID
+ORDER BY v.Total_amount DESC;
+
+## 📊 Analyst Notes
+- Business requirement was to find total amount spent on vendor advances before the final event date (17 July 2026).
+- I used Events and VendorAdvances tables to get the output projections.
+- SQL concept chosen → CTE (Common Table Expression). I see layer by layer dependency in the problem, so CTE gives clear readability.
+- Used WHERE PaymentDate <= '2026-07-17' → early filtering for better performance, less CPU memory, less expensive.
+- Indexing on PaymentDate and EventID would make this query faster and optimized.
+- Overall result → query is efficient, meets business requirement, and easy to extend later.
+
+---
+
+## 🔄 Changes Made
+- Added Events table with Haldi, Sangeeth, Half Saree Ceremony.
+- Created VendorAdvances table for vendor payments.
+- Created MiscExpenses table for event‑day costs.
+- Inserted vendor payments (Surya Decoration, Photography, Jabardasth Team, Jaipal, Decoration Team, etc.).
+- Inserted misc expenses (puja items, cleaners, balloons, petrol, tips, FastTag).
+- Written queries to list events, vendor advances, and misc expenses.
+- Added sorting query to find most expensive misc expense.
+- Added intermediate CTE query for total vendor spend until 17 July.
