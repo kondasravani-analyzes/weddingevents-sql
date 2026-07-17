@@ -279,3 +279,52 @@ VALUES
 (2, '2026-07-12', 'Tip for Cleaners', 700.00, 'Cash'),
 (2, '2026-07-12', 'Tip for Tent House', 2000.00, 'Cash');
 
+use weddingevents;
+INSERT INTO VendorAdvances (EventID, VendorName, ServiceType, PaymentAmount, PaymentType, PaymentDate)
+VALUES
+(3, 'Surya Decoration', 'Decoration', 25000.00, 'Cash', '2026-07-17'),
+(3, 'Photography Team', 'Photography', 35000.00, 'Cash', '2026-07-17'),
+(3, 'Flowers Vendor', 'Flowers for Shoot', 800.00, 'Cash', '2026-07-17'),
+(3, 'Jabardasth Team', 'Comedians', 50000.00, 'Cash', '2026-07-17'),
+(3, 'Tent House Raju', 'Tent Services', 50000.00, 'PhonePe', '2026-07-17'),
+(3, 'Jabardasth Team', 'Comedians', 25000.00, 'PhonePe', '2026-07-17'),
+(3, 'Photography Team', 'Photography', 40000.00, 'PhonePe', '2026-07-17');
+INSERT INTO MiscExpenses (EventID, ExpenseDate, Reason, PaymentAmount, PaymentType)
+VALUES
+(3, '2026-07-17', 'FastTag', 500.00, 'Cash'),
+(3, '2026-07-17', 'Petrol', 2500.00, 'Cash'),
+(3, '2026-07-17', 'Assistant Tip', 500.00, 'Cash');
+INSERT INTO VendorAdvances (EventID, VendorName, ServiceType, PaymentAmount, PaymentType, PaymentDate)
+VALUES
+(3, 'Surya Decoration', 'Decoration', 25000.00, 'Cash', '2026-07-17'),
+(3, 'Photography Team', 'Photography', 35000.00, 'Cash', '2026-07-17'),
+(3, 'Jabardasth Team', 'Comedians', 50000.00, 'Cash', '2026-07-17'),
+(3, 'Tent House Raju', 'Tent Services', 50000.00, 'PhonePe', '2026-07-17'),
+(3, 'Jabardasth Team', 'Comedians', 25000.00, 'PhonePe', '2026-07-17'),
+(3, 'Photography Team', 'Photography', 40000.00, 'PhonePe', '2026-07-17');
+INSERT INTO MiscExpenses (EventID, ExpenseDate, Reason, PaymentAmount, PaymentType)
+VALUES
+(3, '2026-07-17', 'Flowers for Shoot', 800.00, 'Cash'),
+(3, '2026-07-17', 'FastTag', 500.00, 'Cash'),
+(3, '2026-07-17', 'Petrol', 2500.00, 'Cash'),
+(3, '2026-07-17', 'Assistant Tip', 500.00, 'Cash')
+-- Total Vendor Spend 
+with vendorAdvance_total AS (
+select EventID,sum(paymentamount)  as total_amount
+from vendoradvances
+where paymentdate < = '2026-07-17'--/* all the payments made before the event (advances) which include three events */
+group by eventID 
+)
+select e.eventID,e.eventname,v.total_amount
+from events e join vendoradvance_total v
+ON e.eventID = v.eventID 
+order  by v.total_amount DESC;
+----overall spent 
+WITH VendorAdvancesTotal AS (
+    SELECT SUM(PaymentAmount) AS TotalVendorSpend
+    FROM VendorAdvances
+    WHERE PaymentDate <= '2026-07-17'
+)
+SELECT TotalVendorSpend
+FROM VendorAdvancesTotal;
+
